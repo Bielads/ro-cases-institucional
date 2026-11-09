@@ -123,7 +123,7 @@ export default function Index() {
 
   return (
     <main className="overflow-hidden bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 shadow-sm shadow-foreground/[0.03] backdrop-blur-xl transition-colors">
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
           <a href="#inicio" aria-label="ROCASES — início" className="group flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
@@ -196,7 +196,7 @@ export default function Index() {
         )}
       </header>
 
-      <section id="inicio" className="relative isolate scroll-mt-24 overflow-hidden">
+      <section id="inicio" className="relative isolate scroll-mt-24 overflow-hidden bg-gradient-to-b from-background via-background to-secondary/20">
         <div className="pointer-events-none absolute -right-40 top-12 -z-10 h-[34rem] w-[34rem] rounded-full bg-secondary/70 blur-3xl" />
         <div className="mx-auto grid min-h-[650px] max-w-7xl items-center gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-8 lg:px-12 lg:py-20">
           <div className="max-w-[590px]">
@@ -205,7 +205,7 @@ export default function Index() {
               ACESSÓRIOS & ASSISTÊNCIA TÉCNICA · SÃO PAULO
             </Badge>
             <h1 className="max-w-[650px] text-balance font-display text-5xl font-semibold leading-[1.04] tracking-[-0.055em] sm:text-6xl lg:text-[68px]">
-              Tecnologia que acompanha <span className="text-primary">o seu estilo.</span>
+              A ROCASES acompanha <span className="text-primary">o seu estilo.</span>
             </h1>
             <p className="mt-6 max-w-lg text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
               Na ROCASES você encontra acessórios para o dia a dia e assistência
@@ -284,16 +284,16 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 lg:grid-cols-4">
             {categories.map((category, index) => (
               <a
                 key={category.name}
                 href={`${whatsappLink}%20Tenho%20interesse%20em%20${encodeURIComponent(category.name)}.`}
                 target="_blank"
                 rel="noreferrer"
-                className={`group relative overflow-hidden rounded-[1.5rem] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${index === 0 ? "sm:col-span-2 sm:row-span-2" : ""}`}
+                className="group relative overflow-hidden rounded-[1.5rem] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-xl hover:shadow-primary/10"
               >
-                <div className={`${index === 0 ? "aspect-[1.15] sm:aspect-[1.05]" : "aspect-[1.3] sm:aspect-[1.18]"} overflow-hidden`}>
+                <div className="aspect-[1.3] overflow-hidden sm:aspect-[1.18]">
                   <img
                     src={category.image}
                     alt={category.alt}
@@ -373,7 +373,7 @@ export default function Index() {
               </p>
               <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {services.map((service) => (
-                  <div key={service} className="flex min-h-[72px] items-center gap-3 rounded-2xl border border-border/80 bg-card px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+                  <div key={service} className="flex min-h-[72px] items-center gap-3 rounded-2xl border border-border/80 bg-card px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-md">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
                       <Wrench className="h-4 w-4" />
                     </span>
@@ -424,7 +424,7 @@ export default function Index() {
               {reasons.map((reason) => {
                 const Icon = reason.icon;
                 return (
-                  <article key={reason.title} className="rounded-[1.35rem] border border-border bg-card p-6 transition-colors hover:bg-secondary/40">
+                  <article key={reason.title} className="rounded-[1.35rem] border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-secondary/40 hover:shadow-md">
                     <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary text-primary">
                       <Icon className="h-5 w-5" />
                     </span>
@@ -469,7 +469,7 @@ export default function Index() {
                 Ver avaliações <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>
-            <div className="rounded-[1.75rem] border border-border bg-background p-7 sm:p-10">
+            <div className="rounded-[1.75rem] border border-border bg-background p-6 shadow-sm shadow-foreground/[0.03] sm:p-10">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <div className="flex items-center gap-2">
