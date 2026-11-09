@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowDown,
   ArrowRight,
@@ -101,6 +101,24 @@ const services = [
 export default function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const elements = document.querySelectorAll<HTMLElement>(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -32px 0px" },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -123,8 +141,9 @@ export default function Index() {
 
           <nav className="hidden items-center gap-8 md:flex" aria-label="Navegação principal">
             <a className="text-sm font-medium transition-colors hover:text-primary" href="#inicio">Início</a>
-            <a className="text-sm font-medium transition-colors hover:text-primary" href="#produtos">Produtos</a>
-            <a className="text-sm font-medium transition-colors hover:text-primary" href="#sobre">Sobre nós</a>
+            <a className="text-sm font-medium transition-colors hover:text-primary" href="#produtos">Categorias</a>
+            <a className="text-sm font-medium transition-colors hover:text-primary" href="#assistencia">Assistência</a>
+            <a className="text-sm font-medium transition-colors hover:text-primary" href="#sobre">Sobre</a>
             <a className="text-sm font-medium transition-colors hover:text-primary" href="#contato">Contato</a>
           </nav>
 
@@ -152,8 +171,9 @@ export default function Index() {
             <div className="mx-auto flex max-w-7xl flex-col gap-1">
               {[
                 ["Início", "#inicio"],
-                ["Produtos", "#produtos"],
-                ["Sobre nós", "#sobre"],
+                ["Categorias", "#produtos"],
+                ["Assistência", "#assistencia"],
+                ["Sobre", "#sobre"],
                 ["Contato", "#contato"],
               ].map(([label, href]) => (
                 <a
@@ -176,29 +196,20 @@ export default function Index() {
         )}
       </header>
 
-      <section id="inicio" className="relative isolate min-h-[640px] scroll-mt-24">
-        <div className="absolute inset-0 -z-20">
-          <img
-            src={heroImage}
-            alt="Acessórios modernos para smartphones em composição rosa e sofisticada"
-            className="h-full w-full object-cover object-center"
-            fetchPriority="high"
-          />
-        </div>
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/95 to-background/15" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background/55 via-transparent to-background/10" />
-        <div className="mx-auto grid min-h-[640px] max-w-7xl items-center px-5 py-16 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:px-12">
+      <section id="inicio" className="relative isolate scroll-mt-24 overflow-hidden">
+        <div className="pointer-events-none absolute -right-40 top-12 -z-10 h-[34rem] w-[34rem] rounded-full bg-secondary/70 blur-3xl" />
+        <div className="mx-auto grid min-h-[650px] max-w-7xl items-center gap-12 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-8 lg:px-12 lg:py-20">
           <div className="max-w-[590px]">
             <Badge variant="secondary" className="mb-7 rounded-full px-4 py-2 text-xs font-semibold tracking-wide">
               <span className="mr-2 inline-flex h-2 w-2 rounded-full bg-primary" />
-              ACESSÓRIOS & ASSISTÊNCIA TÉCNICA
+              ACESSÓRIOS & ASSISTÊNCIA TÉCNICA · SÃO PAULO
             </Badge>
-            <h1 className="max-w-[650px] text-balance font-display text-5xl font-semibold leading-[1.06] tracking-[-0.055em] sm:text-6xl lg:text-[68px]">
-              Seu celular, <span className="text-primary">do seu jeito.</span>
+            <h1 className="max-w-[650px] text-balance font-display text-5xl font-semibold leading-[1.04] tracking-[-0.055em] sm:text-6xl lg:text-[68px]">
+              Tecnologia que acompanha <span className="text-primary">o seu estilo.</span>
             </h1>
             <p className="mt-6 max-w-lg text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              Acessórios para acompanhar sua rotina e assistência técnica para
-              cuidar do seu smartphone. Tudo pertinho de você, na ROCASES.
+              Na ROCASES você encontra acessórios para o dia a dia e assistência
+              técnica para smartphones, com atendimento próximo em São Paulo.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="h-12 rounded-full px-6">
@@ -230,24 +241,46 @@ export default function Index() {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block" aria-hidden="true" />
+          <div className="relative mx-auto w-full max-w-[600px] lg:ml-auto" aria-label="Acessórios modernos para smartphones">
+            <div className="absolute -inset-4 -rotate-3 rounded-[2.25rem] bg-secondary/80 sm:-inset-6" />
+            <div className="relative overflow-hidden rounded-[1.8rem] border border-border/70 bg-card p-2 shadow-2xl shadow-primary/10 sm:rounded-[2.2rem] sm:p-3">
+              <img
+                src={heroImage}
+                alt="Composição de acessórios modernos para smartphones"
+                className="aspect-[1.08] w-full rounded-[1.35rem] object-cover sm:rounded-[1.7rem]"
+                fetchPriority="high"
+              />
+              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 rounded-2xl border border-background/60 bg-background/90 p-4 shadow-lg backdrop-blur sm:bottom-7 sm:left-7 sm:right-7">
+                <span>
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-primary">ROCASES</span>
+                  <span className="mt-1 block font-display text-sm font-semibold sm:text-base">Tecnologia & cuidado</span>
+                </span>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                  <Smartphone className="h-5 w-5" />
+                </span>
+              </div>
+            </div>
+            <div className="absolute -left-4 top-8 hidden items-center gap-2 rounded-full border border-border bg-card px-4 py-3 text-xs font-semibold shadow-lg sm:flex lg:-left-10">
+              <Sparkles className="h-4 w-4 text-primary" /> Acessórios para sua rotina
+            </div>
+          </div>
         </div>
-        <a href="#produtos" className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary sm:flex">
+        <a href="#produtos" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary sm:flex">
           Explore a ROCASES <ArrowDown className="h-4 w-4" />
         </a>
       </section>
 
-      <section id="produtos" className="scroll-mt-24 py-20 sm:py-28">
+      <section id="produtos" className="reveal scroll-mt-24 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-14 sm:flex-row sm:items-end">
             <div className="max-w-xl">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Escolha com personalidade</p>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Encontre o que combina com você</p>
               <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-5xl">
-                Pequenos detalhes.<br className="hidden sm:block" /> Grande diferença.
+                Acessórios para cada momento.
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-6 text-muted-foreground sm:text-base">
-              Descubra acessórios para completar seu dia a dia. Consulte pelo WhatsApp os modelos disponíveis na loja.
+              Explore algumas das categorias da loja e consulte a equipe sobre modelos e disponibilidade.
             </p>
           </div>
 
@@ -302,12 +335,12 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="border-y border-border/70 bg-secondary/40 py-20 sm:py-24">
+      <section id="assistencia" className="reveal scroll-mt-24 border-y border-border/70 bg-secondary/40 py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Cuidado que continua</p>
-              <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Seu smartphone em boas mãos.</h2>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Assistência técnica ROCASES</p>
+              <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Reparos com atendimento próximo.</h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-muted-foreground sm:text-base">
               Conte com a assistência técnica da ROCASES para diferentes serviços em smartphones.
@@ -338,13 +371,13 @@ export default function Index() {
                 A loja oferece serviços como troca de tela, display e outros reparos.
                 Descreva o que aconteceu com seu aparelho e consulte a equipe sobre avaliação e disponibilidade.
               </p>
-              <div className="mt-7 grid grid-cols-2 gap-x-5 gap-y-4">
+              <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {services.map((service) => (
-                  <div key={service} className="flex items-center gap-2.5 text-sm">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <Check className="h-3 w-3" />
+                  <div key={service} className="flex min-h-[72px] items-center gap-3 rounded-2xl border border-border/80 bg-card px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
+                      <Wrench className="h-4 w-4" />
                     </span>
-                    {service}
+                    <span className="text-sm font-semibold">{service}</span>
                   </div>
                 ))}
               </div>
@@ -364,7 +397,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section id="sobre" className="scroll-mt-24 py-20 sm:py-28">
+      <section id="sobre" className="reveal scroll-mt-24 py-20 sm:py-28">
         <div className="mx-auto grid max-w-7xl gap-14 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-start lg:px-12">
           <div className="lg:sticky lg:top-32">
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Sobre a ROCASES</p>
@@ -416,7 +449,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="bg-card py-20 sm:py-24">
+      <section className="reveal bg-card py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
@@ -458,10 +491,20 @@ export default function Index() {
                 </div>
               </div>
               <div className="my-7 h-px bg-border" />
-              <blockquote className="font-display text-xl font-medium leading-relaxed tracking-tight sm:text-2xl">
-                “Atendimento maravilhoso e produtos com ótimo custo benefício!!”
-              </blockquote>
-              <p className="mt-4 text-sm text-muted-foreground">Avaliação compartilhada por cliente da loja</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <blockquote className="rounded-2xl bg-card p-5 font-display text-base font-medium leading-relaxed tracking-tight sm:text-lg">
+                  “Atendimento maravilhoso e produtos com ótimo custo benefício!!”
+                  <span className="mt-3 block font-sans text-xs font-normal text-muted-foreground">Avaliação de cliente</span>
+                </blockquote>
+                <blockquote className="rounded-2xl bg-card p-5 font-display text-base font-medium leading-relaxed tracking-tight sm:text-lg">
+                  “Loja bem localizada e com estacionamento na frente!!”
+                  <span className="mt-3 block font-sans text-xs font-normal text-muted-foreground">Avaliação de cliente</span>
+                </blockquote>
+                <blockquote className="rounded-2xl bg-card p-5 font-display text-base font-medium leading-relaxed tracking-tight sm:text-lg sm:col-span-2">
+                  “Muito top melhor experiência que tive em compras”
+                  <span className="mt-3 block font-sans text-xs font-normal text-muted-foreground">Avaliação de cliente</span>
+                </blockquote>
+              </div>
             </div>
           </div>
         </div>
@@ -480,25 +523,33 @@ export default function Index() {
               </a>
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              { image: casesImage, alt: "Capinhas de celular em diferentes estilos", label: "Seu estilo, do seu jeito" },
-              { image: chargersImage, alt: "Carregadores e cabos para dispositivos móveis", label: "Acessórios para a rotina" },
-              { image: earbudsImage, alt: "Fones de ouvido sem fio em estojo de carregamento", label: "Som que acompanha você" },
-              { image: screenImage, alt: "Película transparente para proteção de smartphone", label: "Cuidado em cada detalhe" },
-            ].map((post) => (
-              <a key={post.label} href={instagramLink} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl">
-                <img src={post.image} alt={post.alt} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <span className="absolute inset-0 flex items-end bg-gradient-to-t from-foreground/70 via-transparent to-transparent p-4 text-sm font-medium text-background opacity-0 transition-opacity group-hover:opacity-100 sm:p-5">
-                  {post.label} <ArrowUpRight className="ml-2 h-4 w-4" />
-                </span>
-              </a>
-            ))}
+          <div className="grid gap-5 rounded-[1.75rem] border border-border bg-card p-3 sm:grid-cols-[1.1fr_0.9fr] sm:p-4">
+            <div className="relative min-h-[280px] overflow-hidden rounded-[1.3rem] sm:min-h-[360px]">
+              <img src={casesImage} alt="Seleção de capinhas para celular disponíveis na loja" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/75 via-transparent to-transparent" />
+              <p className="absolute bottom-5 left-5 right-5 font-display text-xl font-semibold text-background sm:bottom-7 sm:left-7 sm:text-2xl">
+                Acompanhe as novidades da ROCASES
+              </p>
+            </div>
+            <div className="flex flex-col justify-center px-3 py-5 sm:px-6 sm:py-8">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary">
+                <Instagram className="h-5 w-5" />
+              </span>
+              <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight">Inspiração para o seu dia a dia.</h3>
+              <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
+                Visite o perfil oficial para conhecer mais sobre a loja, ver novidades e acompanhar os produtos.
+              </p>
+              <Button asChild className="mt-6 w-fit rounded-full">
+                <a href={instagramLink} target="_blank" rel="noreferrer">
+                  Acessar Instagram <ArrowUpRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="contato" className="scroll-mt-24 px-5 pb-16 sm:px-8 sm:pb-20 lg:px-12">
+      <section id="contato" className="reveal scroll-mt-24 px-5 pb-16 sm:px-8 sm:pb-20 lg:px-12">
         <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-primary-foreground sm:px-12 sm:py-16 lg:px-16">
           <div className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full border border-primary-foreground/15 sm:h-96 sm:w-96" />
           <div className="pointer-events-none absolute -right-4 -top-12 h-56 w-56 rounded-full border border-primary-foreground/15 sm:h-72 sm:w-72" />
